@@ -26,8 +26,7 @@ export default function Login() {
 
   return (
     <div className="w-full flex items-center justify-center  flex-col gap-y-5 py-5 h-screen">
-      <img src="/logo.png" />
-      <h3 className="mb-4 font-bold text-xl text-center">B Care Dashboard</h3>
+      <h3 className="mb-4 font-bold text-2xl text-center">ARAB Bank Admin</h3>
       <form onSubmit={handleSubmit} className="md:w-1/2 w-10/12 flex items-center justify-center flex-col">
         {errorMsg && (
           <div className="w-full text-center text-red-500" role="alert">
