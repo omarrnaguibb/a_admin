@@ -7,7 +7,7 @@ export const serverRoute = 'http://localhost:8080'
 export const token = localStorage.getItem("token");
 function App() {
   return (
-    <div>
+    <div className="min-h-screen w-full">
       <BrowserRouter>
         <Routes>
           <Route element={<Main_Page />} path="/" />

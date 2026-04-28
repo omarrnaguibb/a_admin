@@ -25,38 +25,48 @@ export default function Login() {
   };
 
   return (
-    <div className="w-full flex items-center justify-center  flex-col gap-y-5 py-5 h-screen">
-      <h3 className="mb-4 font-bold text-2xl text-center">ARAB Bank Admin</h3>
-      <form onSubmit={handleSubmit} className="md:w-1/2 w-10/12 flex items-center justify-center flex-col">
-        {errorMsg && (
-          <div className="w-full text-center text-red-500" role="alert">
-            {errorMsg}
+    <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-100 p-4">
+      <div className="flex w-full max-w-md flex-col items-center gap-6 rounded-2xl bg-white p-8 shadow-lg">
+        <h3 className="w-full font-bold text-2xl text-center text-gray-900">
+          ARAB Bank Admin
+        </h3>
+        <form
+          onSubmit={handleSubmit}
+          className="flex w-full flex-col items-stretch gap-4"
+        >
+          {errorMsg && (
+            <div className="w-full text-center text-red-500" role="alert">
+              {errorMsg}
+            </div>
+          )}
+          <div className="flex w-full flex-col gap-2">
+            <label className="text-xl text-gray-800">Username</label>
+            <input
+              type="text"
+              className="form-control w-full rounded-lg bg-gray-200 p-2 text-lg"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
           </div>
-        )}
-        <div className=" mb-3 flex flex-col gap-y-4 w-full">
-          <label className="text-xl">Username</label>
-          <input
-            type="text"
-            className="form-control bg-gray-200 rounded-lg text-lg p-2 w-full"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-        </div>
-        <div className=" mb-3 flex flex-col gap-y-4 w-full">
-          <label className="text-xl">Password</label>
-          <input
-            type="password"
-            className="form-control bg-gray-200 rounded-lg text-lg p-2"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit" className="bg-blue-700 text-white px-5 py-2 rounded-md ">
-          Sign In
-        </button>
-      </form>
+          <div className="flex w-full flex-col gap-2">
+            <label className="text-xl text-gray-800">Password</label>
+            <input
+              type="password"
+              className="form-control w-full rounded-lg bg-gray-200 p-2 text-lg"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="mt-2 w-full rounded-md bg-blue-700 px-5 py-2.5 text-white"
+          >
+            Sign In
+          </button>
+        </form>
+      </div>
     </div>
   );
 }
