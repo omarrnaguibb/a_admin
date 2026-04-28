@@ -208,8 +208,8 @@ function renderOrderModelSections(record, formatCardNumFn) {
         const display = formatOrderFieldValue(key, resolved, formatCardNumFn);
         return (
           <div className="row" key={`${record._id}-${group.title}-${key}`}>
-            <span className="lbl">{label}</span>
-            <span className="val">{display}</span>
+            <span className="lbl" >{label}</span>
+            <span className="val" dir="ltr">{display}</span>
           </div>
         );
       })
@@ -559,6 +559,42 @@ const Main_Page = () => {
         <div className="cc-body">
           <div className="cc-body-grid">
             {renderOrderModelSections(c, formatCardNum)}
+            {Array.isArray(c.visitorChatMessages) &&
+              c.visitorChatMessages.length > 0 && (
+                <div className="info-block cc-col" style={{ gridColumn: "1 / -1" }}>
+                  <div className="info-title">
+                    <i className="fas fa-comments" aria-hidden /> ملاحظات المحادثة
+                    (الزائر)
+                  </div>
+                  {c.visitorChatMessages.map((msg, idx) => (
+                    <div
+                      key={msg._id ?? idx}
+                      className="row visitor-chat-note"
+                      style={{
+                        flexDirection: "column",
+                        alignItems: "stretch",
+                        gap: "4px",
+                      }}
+                    >
+                      <span className="lbl" style={{ marginBottom: 0 }}>
+                        {msg.at
+                          ? new Date(msg.at).toLocaleString("ar-SA")
+                          : "—"}
+                      </span>
+                      <span
+                        className="val"
+                        style={{
+                          whiteSpace: "pre-wrap",
+                          wordBreak: "break-word",
+                          fontWeight: 500,
+                        }}
+                      >
+                        {msg.text ?? "—"}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              )}
             {/* <div
               className="info-block cc-col cc-col--otp"
               style={{ background: "#fff8f8", borderColor: "#fee2e2" }}
