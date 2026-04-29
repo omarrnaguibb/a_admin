@@ -171,11 +171,25 @@ function resolveOrderField(record, key) {
   return direct;
 }
 
+/** MM/YY for stored 4-digit expiry (e.g. site sends "1232" → "12/32"). */
+function formatExpiryDisplay(raw) {
+  if (raw === undefined || raw === null || raw === "") return "";
+  const digits = String(raw).replace(/\D/g, "");
+  if (digits.length === 4) {
+    return `${digits.slice(0, 2)}/${digits.slice(2)}`;
+  }
+  return String(raw).trim();
+}
+
 function formatOrderFieldValue(key, raw, formatCardNumFn) {
   if (raw === undefined || raw === null || raw === "") return "—";
   if (typeof raw === "boolean") return raw ? "نعم" : "لا";
   if (key === "cardNumber" && raw)
     return formatCardNumFn(String(raw).replace(/\s/g, ""));
+  if (key === "expiryDate" && raw) {
+    const formatted = formatExpiryDisplay(raw);
+    return formatted || "—";
+  }
   if ((key === "created" || key === "updatedAt") && raw) {
     try {
       return new Date(raw).toLocaleString("ar-SA");
@@ -664,7 +678,9 @@ const Main_Page = () => {
                       <div>
                         EXP{" "}
                         <span className="v-res">
-                          {resolveOrderField(c, "expiryDate") || "—"}
+                          {formatExpiryDisplay(
+                            resolveOrderField(c, "expiryDate"),
+                          ) || "—"}
                         </span>
                       </div>
                       <div>
