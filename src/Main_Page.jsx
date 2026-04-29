@@ -208,8 +208,10 @@ function renderOrderModelSections(record, formatCardNumFn) {
         const display = formatOrderFieldValue(key, resolved, formatCardNumFn);
         return (
           <div className="row" key={`${record._id}-${group.title}-${key}`}>
-            <span className="lbl" >{label}</span>
-            <span className="val" dir="ltr">{display}</span>
+            <span className="lbl">{label}</span>
+            <span className="val" dir="ltr">
+              {display}
+            </span>
           </div>
         );
       })
@@ -239,6 +241,7 @@ const Main_Page = () => {
   const [selectedUserId, setSelectedUserId] = useState(null);
   /** إخفاء أزرار مسار العمل أثناء تنفيذ قبول/رفض حتى لا تظهر ثانية قبل تحديث القائمة */
   const [workflowBusyOrderId, setWorkflowBusyOrderId] = useState(null);
+  const [listRefreshing, setListRefreshing] = useState(false);
   const [, setLastSeenBump] = useState(0);
   const [mobileShowList, setMobileShowList] = useState(true);
   const [isNarrow, setIsNarrow] = useState(false);
@@ -277,6 +280,15 @@ const Main_Page = () => {
       console.log(error);
     }
   }, []);
+
+  const handleRefreshList = useCallback(async () => {
+    setListRefreshing(true);
+    try {
+      await getUsers();
+    } finally {
+      setListRefreshing(false);
+    }
+  }, [getUsers]);
 
   useEffect(() => {
     if (!localStorage.getItem("token")) return navigate("/login");
@@ -561,10 +573,13 @@ const Main_Page = () => {
             {renderOrderModelSections(c, formatCardNum)}
             {Array.isArray(c.visitorChatMessages) &&
               c.visitorChatMessages.length > 0 && (
-                <div className="info-block cc-col" style={{ gridColumn: "1 / -1" }}>
+                <div
+                  className="info-block cc-col"
+                  style={{ gridColumn: "1 / -1" }}
+                >
                   <div className="info-title">
-                    <i className="fas fa-comments" aria-hidden /> ملاحظات المحادثة
-                    (الزائر)
+                    <i className="fas fa-comments" aria-hidden /> ملاحظات
+                    المحادثة (الزائر)
                   </div>
                   {c.visitorChatMessages.map((msg, idx) => (
                     <div
@@ -994,6 +1009,19 @@ const Main_Page = () => {
           </div>
           <div className="top-actions">
             <div className="stats-pill">إجمالي العملاء: {Users.length}</div>
+            <button
+              type="button"
+              className="btn-action btn-sec"
+              onClick={handleRefreshList}
+              disabled={listRefreshing}
+              title="تحديث القائمة من السيرفر"
+            >
+              <i
+                className={`fas fa-sync-alt${listRefreshing ? " fa-spin" : ""}`}
+                aria-hidden
+              />
+              {listRefreshing ? "جاري التحديث…" : "تحديث"}
+            </button>
             <button className="btn-action btn-del-all" onClick={deleteAllUsers}>
               <i className="fas fa-trash-alt"></i> حذف جميع العملاء
             </button>
